@@ -18,6 +18,22 @@ class DetectedEntity:
             "page": self.page
         }
 
+    def to_safe_log_dict(self) -> Dict[str, Any]:
+        """
+        Returns a dict suitable for logging without exposing the raw sensitive text.
+        """
+        return {
+            "type": self.type,
+            "confidence": self.confidence,
+            "location": self.location,
+            "page": self.page,
+            # Mask the text, keeping only length or partial info if necessary.
+            "masked_value_length": len(self.text) if self.text else 0
+        }
+        
+    def __str__(self):
+        return f"DetectedEntity(type='{self.type}', confidence={self.confidence:.2f}, page={self.page})"
+
 class EntityDetector:
     """
     Detects sensitive personal, financial, and security information.
