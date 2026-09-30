@@ -46,6 +46,7 @@ class RiskEngine:
         if not entities:
             return {
                 "overall_risk": "NONE",
+                "total_detected": 0,
                 "critical_count": 0,
                 "high_count": 0,
                 "medium_count": 0,
