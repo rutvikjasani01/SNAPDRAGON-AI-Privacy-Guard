@@ -1,11 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/layout';
-import { Hero } from './components/landing';
+import { Hero, Storytelling } from './components/landing';
 
 function Home() {
   return (
     <main className="min-h-screen bg-background text-text-primary pt-20">
       <Hero />
+      <Storytelling />
     </main>
   );
 }
