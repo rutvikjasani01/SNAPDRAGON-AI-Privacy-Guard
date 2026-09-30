@@ -74,18 +74,24 @@ class RiskEngine:
         elif counts[RiskLevel.MEDIUM] > 0:
             overall_risk = RiskLevel.MEDIUM
 
+        total_detected = len(entities)
+
         # Contextual Risk Escalation Logic (Transparent Rules)
-        # e.g., Multiple mediums might escalate to a high
-        explanation = f"Document risk assessed as {overall_risk.value} based on present entities."
+        explanation = (
+            f"Analysis identified {total_detected} sensitive element(s). "
+            f"The highest individual risk severity is {overall_risk.value}."
+        )
+        
         if overall_risk == RiskLevel.LOW and (counts[RiskLevel.LOW] >= 3):
              overall_risk = RiskLevel.MEDIUM
-             explanation = "Risk elevated to MEDIUM due to a combination of multiple low-risk personal identifiers."
+             explanation = f"Analysis identified {total_detected} sensitive elements. Risk elevated to MEDIUM due to the presence of multiple combined personal identifiers, increasing exposure."
              
-        if overall_risk == RiskLevel.MEDIUM and counts[RiskLevel.MEDIUM] >= 2 and counts[RiskLevel.LOW] >= 2:
+        elif overall_risk == RiskLevel.MEDIUM and counts[RiskLevel.MEDIUM] >= 2 and counts[RiskLevel.LOW] >= 2:
              overall_risk = RiskLevel.HIGH
-             explanation = "Risk elevated to HIGH due to a rich combination of personal and secondary identifying data."
+             explanation = f"Analysis identified {total_detected} sensitive elements. Risk elevated to HIGH due to a rich combination of primary and secondary personal/financial data points, which can be correlated."
 
         return {
+            "total_detected": total_detected,
             "overall_risk": overall_risk.value,
             "critical_count": counts[RiskLevel.CRITICAL],
             "high_count": counts[RiskLevel.HIGH],
