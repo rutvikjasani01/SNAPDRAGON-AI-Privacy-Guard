@@ -1,7 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/layout';
 import { Hero, Storytelling, TechPreview } from './components/landing';
-import { Scan } from './pages';
+import { Scan } from './pages/Scan';
+import { History } from './pages/History';
+import { PrivacySimulator } from './pages/PrivacySimulator';
+import { Performance } from './pages/Performance';
+import { Technology } from './pages/Technology';
+import { Settings } from './pages/Settings';
+import { Models } from './pages/Models';
 
 function Home() {
   return (
@@ -20,9 +26,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/scan" element={<Scan />} />
-        {/* Placeholders for upcoming routes to avoid 404s on nav links */}
-        <Route path="/privacy" element={<div className="pt-24 text-center">Privacy Page (Coming Soon)</div>} />
-        <Route path="/technology" element={<div className="pt-24 text-center">Technology Page (Coming Soon)</div>} />
+        <Route path="/history" element={<History />} />
+        <Route path="/privacy" element={<PrivacySimulator />} />
+        <Route path="/performance" element={<Performance />} />
+        <Route path="/technology" element={<Technology />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/models" element={<Models />} />
       </Routes>
     </Router>
   );
