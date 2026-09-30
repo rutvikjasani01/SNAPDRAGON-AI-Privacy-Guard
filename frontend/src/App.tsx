@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/layout';
 import { Hero, Storytelling, TechPreview } from './components/landing';
+import { Scan } from './pages';
 
 function Home() {
   return (
@@ -18,10 +19,10 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/scan" element={<Scan />} />
         {/* Placeholders for upcoming routes to avoid 404s on nav links */}
         <Route path="/privacy" element={<div className="pt-24 text-center">Privacy Page (Coming Soon)</div>} />
         <Route path="/technology" element={<div className="pt-24 text-center">Technology Page (Coming Soon)</div>} />
-        <Route path="/scan" element={<div className="pt-24 text-center">Scan Page (Coming Soon)</div>} />
       </Routes>
     </Router>
   );
