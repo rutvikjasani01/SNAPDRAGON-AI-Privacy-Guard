@@ -79,3 +79,59 @@ async def scan_document(file: UploadFile = File(...)):
         "content_type": file.content_type,
         "message": "File uploaded and validated successfully. Ready for AI processing."
     }
+
+# Mock Database for Scan History
+from typing import Dict, Any
+from datetime import datetime
+import uuid
+
+MOCK_HISTORY_DB: Dict[str, Any] = {
+    "sample-id-1": {
+        "id": "sample-id-1",
+        "filename": "tax_return_2025.pdf",
+        "date": datetime.utcnow().isoformat(),
+        "risk": "HIGH",
+        "detections": 14,
+        "protected_status": True
+    },
+    "sample-id-2": {
+        "id": "sample-id-2",
+        "filename": "meeting_notes.docx",
+        "date": datetime.utcnow().isoformat(),
+        "risk": "LOW",
+        "detections": 2,
+        "protected_status": False
+    }
+}
+
+@app.get(f"{settings.API_V1_STR}/history", tags=["history"])
+def get_scan_history():
+    """
+    Retrieve all past scan history records.
+    """
+    # Return as a list sorted by date descending (mock logic)
+    history_list = list(MOCK_HISTORY_DB.values())
+    history_list.sort(key=lambda x: x["date"], reverse=True)
+    return {"status": "success", "data": history_list}
+
+@app.get(f"{settings.API_V1_STR}/scan/{{scan_id}}", tags=["history"])
+def get_scan_details(scan_id: str):
+    """
+    Retrieve details for a specific scan.
+    """
+    record = MOCK_HISTORY_DB.get(scan_id)
+    if not record:
+        raise HTTPException(status_code=404, detail="Scan record not found")
+    return {"status": "success", "data": record}
+
+@app.delete(f"{settings.API_V1_STR}/history/{{scan_id}}", tags=["history"])
+def delete_scan_history(scan_id: str):
+    """
+    Delete a specific scan record from history.
+    """
+    if scan_id not in MOCK_HISTORY_DB:
+        raise HTTPException(status_code=404, detail="Scan record not found")
+    
+    del MOCK_HISTORY_DB[scan_id]
+    return {"status": "success", "message": f"Scan {scan_id} deleted successfully."}
+
