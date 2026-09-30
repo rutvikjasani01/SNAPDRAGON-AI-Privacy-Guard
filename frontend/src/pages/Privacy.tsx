@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShieldCheck, Cpu, ArrowDown, FileText, Lock } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { PrivacyStatusPanel } from '../components/privacy/PrivacyStatusPanel';
 
 export const Privacy: React.FC = () => {
   return (
@@ -89,6 +90,9 @@ export const Privacy: React.FC = () => {
 
           </div>
         </div>
+
+        {/* Privacy Status Panel */}
+        <PrivacyStatusPanel />
       </div>
     </div>
   );
