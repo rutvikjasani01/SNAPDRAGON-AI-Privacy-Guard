@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ZoomIn, ZoomOut, ChevronLeft, ChevronRight, Image as ImageIcon, FileText } from 'lucide-react';
+import { ZoomIn, ZoomOut, ChevronLeft, ChevronRight, Image as ImageIcon, FileText, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { SecureDisplay } from '../protection/SecureDisplay';
 
 interface DocumentPreviewProps {
   originalUrl: string;
@@ -99,33 +100,37 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
       </div>
 
       {/* Viewer Area */}
-      <div className="relative w-full h-[60vh] bg-gray-100 dark:bg-gray-950 overflow-auto flex items-center justify-center p-4 custom-scrollbar">
-        {fileType === 'IMAGE' ? (
-          <motion.div
-            animate={{ scale: zoomLevel / 100 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="origin-center shadow-lg border border-gray-200 dark:border-gray-800 bg-white"
-          >
-            <img 
-              src={currentUrl} 
-              alt={`${viewMode} document preview`} 
-              className="max-w-none"
-              style={{ maxHeight: 'none' }}
-              draggable={false}
-            />
-          </motion.div>
-        ) : (
-          <div className="flex flex-col items-center justify-center h-full space-y-4 text-gray-500">
-            <FileText className="w-16 h-16 opacity-50" />
-            <p>PDF Preview rendered via {viewMode} URL</p>
-            {/* In a real implementation, we would embed a <canvas> running pdf.js or an <iframe> here */}
-            <iframe 
-              src={`${currentUrl}#zoom=${zoomLevel}`}
-              className="w-full h-full border-0 absolute inset-0"
-              title="PDF Preview"
-            />
+      <div className="relative w-full h-[60vh] bg-gray-100 dark:bg-gray-950 flex items-center justify-center p-4">
+        <SecureDisplay enabled={viewMode === 'PROTECTED'}>
+          <div className="relative w-full h-full overflow-auto flex items-center justify-center custom-scrollbar">
+            {fileType === 'IMAGE' ? (
+              <motion.div
+                animate={{ scale: zoomLevel / 100 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                className="origin-center shadow-lg border border-gray-200 dark:border-gray-800 bg-white"
+              >
+                <img 
+                  src={currentUrl} 
+                  alt={`${viewMode} document preview`} 
+                  className="max-w-none"
+                  style={{ maxHeight: 'none' }}
+                  draggable={false}
+                />
+              </motion.div>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full space-y-4 text-gray-500">
+                <FileText className="w-16 h-16 opacity-50" />
+                <p>PDF Preview rendered via {viewMode} URL</p>
+                {/* In a real implementation, we would embed a <canvas> running pdf.js or an <iframe> here */}
+                <iframe 
+                  src={`${currentUrl}#zoom=${zoomLevel}`}
+                  className="w-full h-full border-0 absolute inset-0"
+                  title="PDF Preview"
+                />
+              </div>
+            )}
           </div>
-        )}
+        </SecureDisplay>
 
         {/* Protection Overlay Indicator */}
         {viewMode === 'PROTECTED' && (
