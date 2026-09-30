@@ -66,14 +66,39 @@ export function Scan() {
     }
   };
 
-  const handleScan = () => {
+  const handleScan = async () => {
     if (!file) return;
     setIsUploading(true);
-    // Simulate upload and scan
-    setTimeout(() => {
+    setError(null);
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('/api/scan', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Upload failed');
+      }
+
+      const data = await response.json();
+      console.log('Upload success:', data);
+      
+      // Artificial delay to show processing state for a moment
+      setTimeout(() => {
+        setIsUploading(false);
+        // Future: Navigate to results using data
+      }, 1500);
+
+    } catch (err: any) {
+      console.error('Scan error:', err);
+      setError(err.message || 'An error occurred during upload.');
       setIsUploading(false);
-      // Future: Navigate to results
-    }, 2500);
+    }
   };
 
   return (
